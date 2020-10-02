@@ -44,7 +44,7 @@ pipeline {
         }
         stage("Docker build") {
             steps {
-                sh "docker build -t danielgara/laravel8cdpart2:${BUILD_TIMESTAMP} ."
+                sh "docker build -t danielgara/laravel8cdpart2 ."
             }
         }
         stage("Docker push") {
@@ -54,28 +54,12 @@ pipeline {
             }
             steps {
                 sh "docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}"
-                sh "docker push danielgara/laravel8cdpart2:${BUILD_TIMESTAMP}"
+                sh "docker push danielgara/laravel8cdpart2"
             }
         }
         stage("Deploy to staging") {
             steps {
-                sh "docker run -d --rm -p 80:80 --name laravel8cdpart2 danielgara/laravel8cdpart2:${BUILD_TIMESTAMP}"
-            }
-        }
-        stage("Acceptance test curl") {
-            steps {
-                sleep 20
-                sh "chmod +x acceptance_test.sh && ./acceptance_test.sh"
-            }
-        }
-        stage("Acceptance test codeception") {
-            steps {
-                sh "vendor/bin/codecept run"
-            }
-            post {
-                always {
-                    sh "docker stop laravel8cdpart2"
-                }
+                sh "ansible-playbook /etc/ansible/playbook/playbook1.yml"
             }
         }
     }
