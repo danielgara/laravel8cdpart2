@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage("Build") {
+        /*stage("Build") {
             environment {
                 DB_HOST = credentials("laravel-host")
                 DB_DATABASE = credentials("laravel-database")
@@ -56,9 +56,17 @@ pipeline {
                 sh "docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}"
                 sh "docker push danielgara/laravel8cdpart2"
             }
-        }
+        }*/
         stage("Deploy to staging") {
+            environment {
+                AWS_ACCESS_KEY_ID = credentials("aws-access-key-id")
+                AWS_SECRET_ACCESS_KEY = credentials("aws-secret-access-key")
+                AWS_SESSION_TOKEN = credentials("aws-session-token")
+            }
             steps {
+                sh "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+                sh "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                sh "export AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
                 sh "ansible-playbook /etc/ansible/playbook/playbook1.yml"
             }
         }
