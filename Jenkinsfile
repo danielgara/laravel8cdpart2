@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+        AWS_ACCESS_KEY_ID = credentials("aws-access-key-id")
+        AWS_SECRET_ACCESS_KEY = credentials("aws-secret-access-key")
+        AWS_SESSION_TOKEN = credentials("aws-session-token")
+    }
     stages {
         /*stage("Build") {
             environment {
@@ -58,11 +63,6 @@ pipeline {
             }
         }*/
         stage("Deploy to staging") {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials("aws-access-key-id")
-                AWS_SECRET_ACCESS_KEY = credentials("aws-secret-access-key")
-                AWS_SESSION_TOKEN = credentials("aws-session-token")
-            }
             steps {
                 sh "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
                 sh "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
