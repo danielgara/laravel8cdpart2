@@ -67,7 +67,7 @@ pipeline {
                 sh "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
                 sh "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
                 sh "export AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
-                sh "eval `ssh-agent -c`"
+                sh "ssh-agent bash"
                 sh "ssh-add /etc/ansible/pem/key.pem"
                 sh "ansible-playbook /etc/ansible/playbook/playbook1.yml"
             }
