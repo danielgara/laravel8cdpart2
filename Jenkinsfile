@@ -93,5 +93,22 @@ pipeline {
                 }
             }
         }
+        stage("Release") {
+            steps {
+                sh "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+                sh "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                sh "export AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
+                sh "ssh-agent sh -c 'ssh-add /etc/ansible/pem/key.pem && ansible-playbook /etc/ansible/playbook/playbook-production-run.yml'"
+            }
+        }
+        stage("Smoke test") {
+            steps {
+                sleep 20
+                sh "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+                sh "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                sh "export AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
+                sh "ssh-agent sh -c 'ssh-add /etc/ansible/pem/key.pem && ansible-playbook /etc/ansible/playbook/playbook-production-acceptance.yml'"
+            }
+        }
     }
 }
