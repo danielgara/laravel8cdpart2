@@ -6,7 +6,7 @@ pipeline {
         AWS_SESSION_TOKEN = credentials("aws-session-token")
     }
     stages {
-        /*stage("Build") {
+        stage("Build") {
             environment {
                 DB_HOST = credentials("laravel-host")
                 DB_DATABASE = credentials("laravel-database")
@@ -62,7 +62,7 @@ pipeline {
                 sh "docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}"
                 sh "docker push danielgara/laravel8cdpart2"
             }
-        }*/
+        }
         stage("Deploy to staging") {
             steps {
                 sh "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
